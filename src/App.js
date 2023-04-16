@@ -7,6 +7,7 @@ import { Container } from '@mui/material'
 
 import Navigation from './components/Navigation'
 import AboutApp from './components/AboutApp'
+import TripsPage from './components/TripsPage'
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
           <Navigation />
           <Routes>
             <Route path='/' element={<AboutApp />} />
-            <Route path='/trips' element={<AboutApp />} />
+            <Route path='/trips' element={<TripsPage />} />
             <Route path='/stations' element={<AboutApp />} />
             <Route path='/station/:sid' element={<AboutApp />} />
             <Route path='/uploadFiles' element={<AboutApp />} />
