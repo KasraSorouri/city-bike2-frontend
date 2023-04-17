@@ -10,28 +10,20 @@ const TripsPage = () => {
   const [ page, setPage ] = useState(0)
   const [ rows, setRows ] = useState(10)
   const [ sort, setSort ] = useState({ sortItem: 'departure' , sortOrder: -1 })
-  const [ filterParameters, setFilterParameters ] = useState({})
+  const [ filterParameters, setFilterParameters ] = useState()
   const sortParam = sort.sortItem
   const sortOrder = sort.sortOrder
   const pageParameter = { page, rows, sort }
 
   const result = useQuery(TRIPS, { variables: { page, rows, sortParam, sortOrder , ...filterParameters } })
-  console.log('render again ! ')
   if (result.loading) {
     return <p>loading .....</p>
   }
 
-  console.log('result data ->',result.data)
-
   const tripsData = result.data
 
   const handelFilter = async(filterData) => {
-    console.log('filter parameter ->', filterData)
     setFilterParameters(filterData)
-    console.log('filter filterParameters ->', filterParameters)
-    const variables = { page, rows, sortParam, sortOrder , ...filterParameters }
-    console.log('variables ->', variables)
-
   }
 
   const handleChangePage = (page) => {
@@ -48,10 +40,12 @@ const TripsPage = () => {
     setPage(0)
   }
 
+  const filterActived = filterParameters ? true : false
+
   return(
     <div>
-      <Togglable buttonLabel='Filter'>
-        <TripFilter changeFilter={handelFilter} />
+      <Togglable buttonLabel='Filter' active={ filterActived }>
+        <TripFilter changeFilter={handelFilter} filterParameters={filterParameters} />
       </Togglable>
       <Trips tripsData={tripsData} pageParameter={pageParameter} changePage={handleChangePage} changeRows={handleChangeRows} changeSort={handleSort} />
     </div>

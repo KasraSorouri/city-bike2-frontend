@@ -17,31 +17,48 @@ import {
   useMediaQuery
 } from '@mui/material'
 
-const TripFilter = ({ changeFilter }) => {
+const TripFilter = ({ changeFilter, filterParameters }) => {
 
   const [filteredOriginStations, setFilteredOriginStations] = useState([])
   const [filteredDestinationStations, setFilteredDestinationStations] = useState([])
-  const [dates, setDates] = useState({ start: null, end: null })
+
   // Display improvment
   const isNarroww = useMediaQuery('(max-width:1040px)')
 
-  const initialFilterPrameter = {
-    originStation: '',
+  let initialFilterPrameter = {
+    originStationId: null,
+    destinationStationID: null,
+    originStation: null,
     destinationStation: '',
     durationFrom: '',
     durationTo: '',
     distanceFrom: '',
     distanceTo: '',
-    timeFrom: '',
-    timeTo: ''
+    timeFrom: null,
+    timeTo: null,
   }
+
+  if (filterParameters) {
+    initialFilterPrameter = {
+      originStationId: filterParameters.departureStation || null,
+      destinationStationID: filterParameters.returnStation || null,
+      originStation: '',
+      destinationStation: '',
+      durationFrom: filterParameters.durationFrom || '',
+      durationTo: filterParameters.durationTo || '',
+      distanceFrom: filterParameters.distanceFrom || '',
+      distanceTo: filterParameters.distanceTo || '',
+      timeFrom: filterParameters.departureTimeFrom,
+      timeTo: filterParameters.returnTimeTo,
+    }
+  }
+
   const [inputs, setInputs] = useState(initialFilterPrameter)
 
-  const maxItemsToShow = 10
+  const maxItemsToShow = 200
 
   let parameters = {}
   parameters = useQuery(TRIPS_PARAMETERS)
-
 
   if (parameters.loading) {
     return (<p>Loading .... </p>)
@@ -56,15 +73,36 @@ const TripFilter = ({ changeFilter }) => {
   const timeRanges = parameters.data.TimeRanges
   const stationList = parameters.data.StationList
 
+  // Reload last filtered stations
+  let preSetOriginStation = null
+  let preSetReturnStation = null
+  if (filterParameters){
+    preSetOriginStation = (filterParameters.departureStation) ?
+      stationList.filter((s) => s.stationId === filterParameters.departureStation)[0]
+      : null
+
+    preSetReturnStation = (filterParameters.returnStation) ?
+      stationList.filter((s) => s.stationId === filterParameters.returnStation)[0]
+      : null
+  }
+
+  // Handle fields update
   const handleChange = (event) => {
     const name = event.target.name
     const value = event.target.value
     setInputs(values => ({ ...values, [name]: value }))
   }
 
+  // Handle time fields update
+  const handleStartDate = (value) => {
+    setInputs(values => ({ ...values, timeFrom: value }))
+  }
+  const handleEndDate = (value) => {
+    setInputs(values => ({ ...values, timeTo: value }))
+  }
+
   // Filter the Departure station List based on input value
   const handleOriginStationListFilter = (event) => {
-    console.log('filter ->', event.target.value)
     const filteredStations = stationList.filter(
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())
@@ -75,7 +113,6 @@ const TripFilter = ({ changeFilter }) => {
 
   // Filter the Destination station List based on input value
   const handleDestinationStationListFilter = (event) => {
-    console.log('filter ->', event.target.value)
     const filteredStations = stationList.filter(
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())
@@ -84,36 +121,38 @@ const TripFilter = ({ changeFilter }) => {
   }
   const DestinationStationListParam = filteredDestinationStations.length > 0 ? filteredDestinationStations : stationList.slice(0, maxItemsToShow)
 
-  // Set the time limit
-  const handleStartDate = (value) => {
-    setDates(values => ({ ...values, 'start': value }))
-  }
-  const handleEndDate = (value) => {
-    setDates(values => ({ ...values, 'end': value }))
-  }
-
-  // Convert filter parameter and send it to upper level
+  // Convert filter parameter and send it back
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('inputs ->', inputs)
     const filter = {
-      departureStation: inputs.originStation ? stationList.filter((s) => s.stationName === inputs.originStation)[0].stationId : null,
-      returnStation: inputs.destinationStation ? stationList.filter((s) => s.stationName === inputs.destinationStation)[0].stationId : null,
-      departureTimeFrom: dates.start,
-      returnTimeTo: dates.end,
+      departureStation: (inputs.originStation) ? inputs.originStation.stationId :
+        (preSetOriginStation) ? preSetOriginStation.stationId : null,
+      returnStation: (inputs.destinationStation) ? inputs.destinationStation.stationId :
+        (preSetReturnStation) ? preSetReturnStation.stationId : null,
+      departureTimeFrom: inputs.timeFrom,
+      returnTimeTo: inputs.timeTo,
       distanceFrom: Number(inputs.distanceFrom),
       distanceTo: Number(inputs.distanceTo),
       durationFrom: Number(inputs.durationFrom),
       durationTo: Number(inputs.durationTo),
     }
-    console.log('filter ->', filter)
     changeFilter(filter)
   }
 
   const handleReset = () => {
-    setDates({ start: null, end: null })
+    setInputs({
+      originStationId: null,
+      destinationStationID: null,
+      originStation: '',
+      destinationStation: '',
+      durationFrom: '',
+      durationTo: '',
+      distanceFrom: '',
+      distanceTo: '',
+      timeFrom: null,
+      timeTo: null,
+    })
     changeFilter(null)
-    setInputs(initialFilterPrameter)
   }
 
   return (
@@ -133,8 +172,13 @@ const TripFilter = ({ changeFilter }) => {
               <Autocomplete
                 id='originStation'
                 name='originStation'
+                sx={{ width: '30ch' }}
                 options={originStationListParam}
-                getOptionLabel={(option) => option.stationName}
+                getOptionLabel={(option) => option.stationName || ''}
+                value={inputs.originStation || preSetOriginStation }
+                defaultValue={preSetOriginStation}
+                onChange={(event, newValue) => {
+                  handleChange({ target: { name: 'originStation', value: newValue } })}}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -142,56 +186,57 @@ const TripFilter = ({ changeFilter }) => {
                     onChange={handleOriginStationListFilter}
                   />
                 )}
-                onChange={event => handleChange({ target: { name: 'originStation', value: event.target.innerText } })}
+                isOptionEqualToValue={(option, value) => option.stationId === value.stationId}
               />
               <Autocomplete
                 id='destinationStation'
                 name='destinationStation'
                 options={DestinationStationListParam}
-                getOptionLabel={(option) => option.stationName}
+                getOptionLabel={(option) => option.stationName || ''}
+                value={inputs.destinationStation || preSetReturnStation }
+                defaultValue={preSetReturnStation}
+                onChange={(event, newValue) => {
+                  handleChange({ target: { name: 'destinationStation', value: newValue } })}}
                 renderInput={(params) => (
                   <TextField
-                    key={params.id}
-                    value={params.name}
                     {...params}
                     label='Destination Station'
                     onChange={handleDestinationStationListFilter}
                   />
                 )}
-                onChange={event => {
-                  console.log('evet ***/**** ->', event)
-                  handleChange({ target: { name: 'destinationStation', value: event.target.innerText } })
-                }}
+
               />
               <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fi}>
                 <DatePicker
                   label='Time from'
-                  name='startDate'
+                  name='timeFrom'
                   minDate={new Date(timeRanges.earliest)}
                   maxDate={new Date(timeRanges.latest)}
-                  value={dates.start}
+                  defaultValue={inputs.timeFrom}
+                  value={inputs.timeFrom}
                   onChange={handleStartDate}
                   TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 150 }} />}
                 />
                 <DatePicker
                   label='Time to'
-                  name='Trim to'
+                  name='timeTo'
                   minDate={new Date(timeRanges.earliest)}
                   maxDate={new Date(timeRanges.latest)}
-                  value={dates.end}
+                  defaultValue={inputs.timeTo}
+                  value={inputs.timeTo}
                   onChange={handleEndDate}
                   TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 150 }} />}
                 />
               </LocalizationProvider>
             </Stack>
-            <Stack direction={'row'} flex justifyContent="space-between" >
+            <Stack flex direction={'row'} justifyContent="space-between" >
               <InputLabel sx={{ marginTop: 3 }}>Duration between</InputLabel>
               <TextField
                 id='durationFrom'
                 label='Duration >='
                 name='durationFrom'
                 value={inputs.durationFrom}
-                sx={{ maxWidth: 80 }}
+                sx={{ maxWidth: 90 }}
                 onChange={(event) => handleChange(event)}
                 InputProps={{
                   startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
@@ -203,7 +248,7 @@ const TripFilter = ({ changeFilter }) => {
                 label='Duration <='
                 name='durationTo'
                 value={inputs.durationTo}
-                sx={{ maxWidth: 80 }}
+                sx={{ maxWidth: 90 }}
                 onChange={event => handleChange(event)}
                 InputProps={{
                   startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,
@@ -215,7 +260,7 @@ const TripFilter = ({ changeFilter }) => {
                 label='Distance >='
                 name='distanceFrom'
                 value={inputs.distanceFrom}
-                sx={{ maxWidth: 80 }}
+                sx={{ maxWidth: 90 }}
                 onChange={event => handleChange(event)}
                 InputProps={{
                   startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
@@ -227,7 +272,7 @@ const TripFilter = ({ changeFilter }) => {
                 label='Distance <='
                 name='distanceTo'
                 value={inputs.distanceTo}
-                sx={{ maxWidth: 80 }}
+                sx={{ maxWidth: 90 }}
                 onChange={event => handleChange(event)}
                 InputProps={{
                   startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,

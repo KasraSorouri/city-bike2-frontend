@@ -2,7 +2,7 @@ import { useState, forwardRef, useImperativeHandle } from 'react'
 import { Button } from '@mui/material'
 
 const Togglable = forwardRef((props, refs) => {
-  const [formVisible, setFormVisible] = useState(false)
+  const [formVisible, setFormVisible] = useState(props.active)
 
   const hideWhenVisible = { display: formVisible ? 'none' : '', marginTop: 10 }
   const showWhenVisible = { display: formVisible ? '' : 'none', marginTop: 10 }
