@@ -1,25 +1,27 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 
-import { TRIPS } from '../queries'
+import { STATIONS, STATION_LIST } from '../queries'
 import Togglable from './Togglable'
-import Trips from './Trips'
-import TripFilter from './TripFilter'
+import Stations from './Stations'
+import StationFilter from './StationFilter'
 
-const TripsPage = () => {
+const StationsPage = () => {
   const [ page, setPage ] = useState(0)
   const [ rows, setRows ] = useState(10)
-  const [ sort, setSort ] = useState({ sortItem: 'departure' , sortOrder: -1 })
+  const [ sort, setSort ] = useState({ sortItem: 'stationId' , sortOrder: 1 })
   const [ filterParameters, setFilterParameters ] = useState()
+
   const sortParam = sort.sortItem
   const sortOrder = sort.sortOrder
   const pageParameter = { page, rows, sort }
 
-  const result = useQuery(TRIPS, { variables: { page, rows, sortParam, sortOrder , ...filterParameters } })
+  let stationList = []
+  const stationParameter = useQuery(STATION_LIST)
+  const result = useQuery(STATIONS, { variables: { page, rows, sortParam, sortOrder , ...filterParameters } })
   if (result.loading) {
     return <p>loading .....</p>
   }
-
   if (result.error) {
     return (
       <div>
@@ -31,7 +33,11 @@ const TripsPage = () => {
     )
   }
 
-  const tripsData = result.data
+  const stationsData = result.data
+
+  if (stationParameter.data) {
+    stationList = stationParameter.data.StationList
+  }
 
   const handelFilter = async(filterData) => {
     setFilterParameters(filterData)
@@ -56,11 +62,11 @@ const TripsPage = () => {
   return(
     <div>
       <Togglable buttonLabel='Filter' active={ filterActived }>
-        <TripFilter changeFilter={handelFilter} filterParameters={filterParameters} />
+        <StationFilter changeFilter={handelFilter} filterParameters={filterParameters} stationList={stationList} />
       </Togglable>
-      <Trips tripsData={tripsData} pageParameter={pageParameter} changePage={handleChangePage} changeRows={handleChangeRows} changeSort={handleSort} />
+      <Stations stationsData={stationsData} pageParameter={pageParameter} changePage={handleChangePage} changeRows={handleChangeRows} changeSort={handleSort} />
     </div>
   )
 }
 
-export default TripsPage
+export default StationsPage

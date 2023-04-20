@@ -191,6 +191,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
               <Autocomplete
                 id='destinationStation'
                 name='destinationStation'
+                sx={{ width: '30ch' }}
                 options={DestinationStationListParam}
                 getOptionLabel={(option) => option.stationName || ''}
                 value={inputs.destinationStation || preSetReturnStation }
@@ -215,7 +216,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                   defaultValue={inputs.timeFrom}
                   value={inputs.timeFrom}
                   onChange={handleStartDate}
-                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 150 }} />}
+                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} />}
                 />
                 <DatePicker
                   label='Time to'
@@ -225,7 +226,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                   defaultValue={inputs.timeTo}
                   value={inputs.timeTo}
                   onChange={handleEndDate}
-                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 150 }} />}
+                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} /> }
                 />
               </LocalizationProvider>
             </Stack>

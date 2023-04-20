@@ -21,6 +21,7 @@ export const STATION_LIST = gql`
     }
   }
 `
+
 export const TRIPS = gql`
   query Trips ($departureStation: String, 
     $returnStation: String, 
@@ -56,6 +57,29 @@ export const TRIPS = gql`
           distance,
           duration,
           id,
-    }
+      }
+  }
+`
+
+export const STATIONS = gql`
+  query Stations ($stationId: [String],
+    $page: Int!,
+    $rows: Int!,
+    $sortParam: String,
+    $sortOrder:Int) {
+      StationCount
+      Stations (stations: $stationId,
+        page: $page,
+        rows: $rows,
+        sortParam: $sortParam,
+        sortOrder:$sortOrder) {
+          id,
+          stationId,
+          stationName,
+          address,
+          city,
+          operator,
+          capacity,
+      }
   }
 `
