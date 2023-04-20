@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client'
 import { STATION_INFO, TRIPS_PARAMETERS } from '../queries'
 import { Origins, Destinations, BriefStatistic } from './StationInfoItems'
 
-//import { useParams, useNavigate } from 'react-router-dom'
+import { useLocation  } from 'react-router-dom'
 import { Map, Marker, ZoomControl  } from 'pigeon-maps'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -18,23 +18,20 @@ import {
   useMediaQuery,
 } from '@mui/material'
 
-const StationInfo = (id) => {
-  //const sid = useParams(id).sid
-  console.log(' sid ->', id)
+const StationInfo = () => {
+  const location = useLocation()
+  const { sid } = location.state ? location.state : {}
 
   // Display improvment
   const isNarroww = useMediaQuery('(max-width:1040px)')
 
   const [inputs, setInputs] = useState({})
-  console.log(' inputs ->', inputs)
 
   const filterParameters = {
-    stationId : (inputs.station) ? inputs.station.stationId :'001',
+    stationId : (inputs.station) ? inputs.station.stationId : ( sid ? sid : '001' ),
     timeFrom: inputs.timeFrom,
     timeTo: inputs.timeTo
   }
-
-  console.log(' filterParameters ->', filterParameters)
 
   const stationParameter = useQuery(TRIPS_PARAMETERS)
   const result = useQuery(STATION_INFO, { variables: { ...filterParameters } })
@@ -55,7 +52,6 @@ const StationInfo = (id) => {
 
   const stationsData = result.data
 
-  console.log('stations data ->', stationsData)
   let timeRanges
   let stationList = []
   if (stationParameter.data) {
@@ -63,13 +59,10 @@ const StationInfo = (id) => {
     timeRanges = stationParameter.data.TimeRanges
 
   }
-  console.log('stations list ->', stationList)
-  console.log(' timeRanges ->', timeRanges)
 
   // Filter the stations List based on input value
   let filteredStations  = []
   const handleStationListFilter = (event) => {
-    console.log('filter is called ', event)
     filteredStations = stationList.filter(
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())

@@ -12,7 +12,7 @@ import {
 import { visuallyHidden } from '@mui/utils'
 import TablePaginationActions from '../utils/tablePaginationActions'
 
-//import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Stations = (props) => {
   const { stationsData, pageParameter, changePage, changeRows, changeSort } = props
@@ -20,6 +20,8 @@ const Stations = (props) => {
   const totalStations = stationsData.StationCount
   const order = pageParameter.sort.sortOrder === 1 ? 'asc' : 'desc'
   const orderBy = pageParameter.sort.sortItem
+
+  const navigate = useNavigate()
 
   const columnHeader = [
     { id: 'stationId', lable: 'Station ID', minWidth: 5 },
@@ -91,7 +93,7 @@ const Stations = (props) => {
             <TableBody>
               { stations.map((station) => {
                 return(
-                  <TableRow hover role='checkbox' tabIndex={-1} key={station.id} onClick={() => console.log('navigate request') } >
+                  <TableRow hover role='checkbox' tabIndex={-1} key={station.id} onClick={() => navigate('/stationInfo',{ state : { sid : station.stationId } }) } >
                     <TableCell align='center' >
                       {station.stationId}
                     </TableCell>
