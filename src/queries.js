@@ -83,3 +83,57 @@ export const STATIONS = gql`
       }
   }
 `
+
+export const STATION_INFO = gql`
+  query StationInfo ($stationId : String!, $timeFrom: String, $timeTo: String){
+    Stations (stations: [$stationId], page: 0, rows: 1 ) {
+        id,
+        stationId,
+        stationName,
+        address,
+        city,
+        operator,
+        capacity,
+        gpsPosition {
+          longtitude,
+          latitude,
+        }
+    }
+    StationStatistics (stationId : $stationId, timeFrom: $timeFrom, timeTo: $timeTo) {
+      totalTripsFrom,
+      totalTripsTo,
+      avrageTripFrom,
+      avrageTripTo,
+      popularDestination{
+        stationId,
+        count,
+        aveDuration,
+        minDuration,
+        maxDuration,
+        aveDistance,
+        minDistance,
+        maxDistance,
+      },
+      popularOrigin{
+        stationId,
+        count,
+        aveDuration,
+        minDuration,
+        maxDuration,
+        aveDistance,
+        minDistance,
+        maxDistance,
+      },
+      roundTrip{
+        stationId,
+        count,
+        aveDuration,
+        minDuration,
+        maxDuration,
+        aveDistance,
+        minDistance,
+        maxDistance,
+      },
+    }
+  }
+`

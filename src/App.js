@@ -9,7 +9,7 @@ import Navigation from './components/Navigation'
 import AboutApp from './components/AboutApp'
 import TripsPage from './components/TripsPage'
 import StationsPage from './components/StationsPage'
-
+import StationInfo from './components/StationInfo'
 
 function App() {
 
@@ -22,7 +22,7 @@ function App() {
             <Route path='/' element={<AboutApp />} />
             <Route path='/trips' element={<TripsPage />} />
             <Route path='/stations' element={<StationsPage />} />
-            <Route path='/station/:sid' element={<AboutApp />} />
+            <Route path='/stationInfo/' element={<StationInfo />} />
             <Route path='/uploadFiles' element={<AboutApp />} />
           </Routes>
         </Router>
