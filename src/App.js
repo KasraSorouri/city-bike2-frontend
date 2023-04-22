@@ -10,6 +10,7 @@ import AboutApp from './components/AboutApp'
 import TripsPage from './components/TripsPage'
 import StationsPage from './components/StationsPage'
 import StationInfo from './components/StationInfo'
+import UploadFiles from './components/UploadFiles'
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
             <Route path='/trips' element={<TripsPage />} />
             <Route path='/stations' element={<StationsPage />} />
             <Route path='/stationInfo/' element={<StationInfo />} />
-            <Route path='/uploadFiles' element={<AboutApp />} />
+            <Route path='/uploadFiles' element={<UploadFiles />} />
           </Routes>
         </Router>
       </Container>
