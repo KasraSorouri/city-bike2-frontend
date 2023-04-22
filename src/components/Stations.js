@@ -45,6 +45,7 @@ const Stations = (props) => {
               key={column.id}
               align='center'
               style={{ minWidth: column.minWidth }}
+              sx={{ backgroundColor: '#1976d2', color: 'white' }}
               sortDirection={orderBy === column.id ? order : false }
             >
               <TableSortLabel

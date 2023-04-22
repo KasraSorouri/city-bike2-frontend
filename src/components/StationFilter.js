@@ -6,14 +6,10 @@ import {
   TextField,
   Stack,
   Button,
-  useMediaQuery
 } from '@mui/material'
 
 const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
   const [filteredStations, setFilteredStations] = useState([])
-
-  // Display improvment
-  const isNarroww = useMediaQuery('(max-width:1040px)')
 
   let station = []
   if (filterParameters){
@@ -88,7 +84,6 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
                 options={stationListParam}
                 getOptionLabel={(option) => option.stationName || ''}
                 value={inputs.station}
-                //defaultValue={preSetStation}
                 onChange={(event, newValue) => {
                   handleChange({ target: { name: 'station', value: newValue } })}}
                 renderInput={(params) => (
@@ -100,12 +95,9 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
                 )}
                 isOptionEqualToValue={(option, value) => option.stationId === value.stationId}
               />
-            </Stack>
-          </Grid>
-          <Grid>
-            <Stack spacing={3} flex direction={isNarroww ? 'row' : 'column'} marginTop={2} marginBottom={1} >
-              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit}>Filter</Button>
-              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset}>Reset</Button>
+              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit} sx={{ height: '50px' , margin: 1 }} >Filter</Button>
+              <span style={{ margin: '5px' }} />
+              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset} sx={{ height: '50px' , margin: 1 }} >Reset</Button>
             </Stack>
           </Grid>
         </Grid>

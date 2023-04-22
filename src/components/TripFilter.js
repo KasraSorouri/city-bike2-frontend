@@ -14,7 +14,8 @@ import {
   Stack,
   InputLabel,
   Button,
-  useMediaQuery
+  useMediaQuery,
+  Typography
 } from '@mui/material'
 
 const TripFilter = ({ changeFilter, filterParameters }) => {
@@ -23,7 +24,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
   const [filteredDestinationStations, setFilteredDestinationStations] = useState([])
 
   // Display improvment
-  const isNarroww = useMediaQuery('(max-width:1040px)')
+  const isNarrow = useMediaQuery('(max-width:1440px)')
 
   let initialFilterPrameter = {
     originStationId: null,
@@ -159,133 +160,171 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
     <div>
       <Box
         component='form'
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
         noValidate
         autoComplete='off'
-        flex={6}
       >
-        <Grid container>
-          <Grid>
-            <Stack direction={'row'} flex justifyContent="space-between" >
-              <Autocomplete
-                id='originStation'
-                name='originStation'
-                sx={{ width: '30ch' }}
-                options={originStationListParam}
-                getOptionLabel={(option) => option.stationName || ''}
-                value={inputs.originStation || preSetOriginStation }
-                defaultValue={preSetOriginStation}
-                onChange={(event, newValue) => {
-                  handleChange({ target: { name: 'originStation', value: newValue } })}}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label='Origin Station'
-                    onChange={handleOriginStationListFilter}
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Stack direction={isNarrow ? 'column' : 'row'} justifyContent="space-between" flex>
+              <Box>
+                <Typography>Stations</Typography>
+                <Stack direction={isNarrow ? 'column' : 'row'} justifyContent="space-between" flex>
+                  <Autocomplete
+                    id='originStation'
+                    name='originStation'
+                    sx={{
+                      flex: 1,
+                      minWidth: '300px',
+                      maxWidth:'600px' }}
+                    options={originStationListParam}
+                    getOptionLabel={(option) => option.stationName || ''}
+                    value={inputs.originStation || preSetOriginStation }
+                    defaultValue={preSetOriginStation}
+                    onChange={(event, newValue) => {
+                      handleChange({ target: { name: 'originStation', value: newValue } })}}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Origin Station'
+                        onChange={handleOriginStationListFilter}
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => option.stationId === value.stationId}
                   />
-                )}
-                isOptionEqualToValue={(option, value) => option.stationId === value.stationId}
-              />
-              <Autocomplete
-                id='destinationStation'
-                name='destinationStation'
-                sx={{ width: '30ch' }}
-                options={DestinationStationListParam}
-                getOptionLabel={(option) => option.stationName || ''}
-                value={inputs.destinationStation || preSetReturnStation }
-                defaultValue={preSetReturnStation}
-                onChange={(event, newValue) => {
-                  handleChange({ target: { name: 'destinationStation', value: newValue } })}}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label='Destination Station'
-                    onChange={handleDestinationStationListFilter}
+                  <span style={{ margin: '5px' }} />
+                  <Autocomplete
+                    id='destinationStation'
+                    name='destinationStation'
+                    sx={{
+                      flex: 1,
+                      minWidth: '300px',
+                      maxWidth:'600px' }}
+                    options={DestinationStationListParam}
+                    getOptionLabel={(option) => option.stationName || ''}
+                    value={inputs.destinationStation || preSetReturnStation }
+                    defaultValue={preSetReturnStation}
+                    onChange={(event, newValue) => {
+                      handleChange({ target: { name: 'destinationStation', value: newValue } })}}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Destination Station'
+                        onChange={handleDestinationStationListFilter}
+                      />
+                    )}
                   />
-                )}
-
-              />
-              <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fi}>
-                <DatePicker
-                  label='Time from'
-                  name='timeFrom'
-                  minDate={new Date(timeRanges.earliest)}
-                  maxDate={new Date(timeRanges.latest)}
-                  defaultValue={inputs.timeFrom}
-                  value={inputs.timeFrom}
-                  onChange={handleStartDate}
-                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} />}
-                />
-                <DatePicker
-                  label='Time to'
-                  name='timeTo'
-                  minDate={new Date(timeRanges.earliest)}
-                  maxDate={new Date(timeRanges.latest)}
-                  defaultValue={inputs.timeTo}
-                  value={inputs.timeTo}
-                  onChange={handleEndDate}
-                  TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} /> }
-                />
-              </LocalizationProvider>
+                </Stack>
+              </Box>
+              <span style={{ margin: '8px' }} />
+              <Box>
+                <Typography>Time Ranges</Typography>
+                <Stack direction='row' justifyContent="space-between" flex>
+                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fi}>
+                    <DatePicker
+                      label='Time from'
+                      name='timeFrom'
+                      minDate={new Date(timeRanges.earliest)}
+                      maxDate={new Date(timeRanges.latest)}
+                      defaultValue={inputs.timeFrom}
+                      value={inputs.timeFrom}
+                      onChange={handleStartDate}
+                      sx={{
+                        minWidth: '140px',
+                        maxWidth:'200px' }}
+                      TextFieldComponent={(params) => <TextField {...params} />}
+                    />
+                    <span style={{ margin: '5px' }} />
+                    <DatePicker
+                      label='Time to'
+                      name='timeTo'
+                      minDate={new Date(timeRanges.earliest)}
+                      maxDate={new Date(timeRanges.latest)}
+                      defaultValue={inputs.timeTo}
+                      value={inputs.timeTo}
+                      onChange={handleEndDate}
+                      sx={{
+                        minWidth: '140px',
+                        maxWidth:'200px' }}
+                      TextFieldComponent={(params) => <TextField {...params} /> }
+                    />
+                  </LocalizationProvider>
+                </Stack>
+              </Box>
+              <span style={{ margin: '8px' }} />
+              <Grid item xs={12} md={6}>
+                <Stack direction={isNarrow ? 'column' : 'row'} justifyContent="space-between" flex spacing={1}>
+                  <Box flex={6}>
+                    <Typography>Duration between</Typography>
+                    <Stack  direction={'row'} justifyContent="space-between" flex >
+                      <TextField
+                        id='durationFrom'
+                        label='From'
+                        name='durationFrom'
+                        value={inputs.durationFrom}
+                        sx={{
+                          minWidth: '75px',
+                          maxWidth:'200px',
+                        }}
+                        onChange={(event) => handleChange(event)}
+                        InputProps={{ startAdornment: <InputAdornment position='start' >&#62;=</InputAdornment> }}
+                      />
+                      <InputLabel sx={{ width: '80px', marginTop:2, marginRight: 1, marginLeft: 1 }}> and</InputLabel>
+                      <TextField
+                        id='durationTo'
+                        label='To'
+                        name='durationTo'
+                        value={inputs.durationTo}
+                        sx={{
+                          minWidth: '50px',
+                          maxWidth:'200px' }}
+                        onChange={event => handleChange(event)}
+                        InputProps={{
+                          startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,
+                        }}
+                      />
+                    </Stack>
+                  </Box>
+                  <span style={{ margin: '8px' }} />
+                  <Box flex={6}>
+                    <Typography>Distance between</Typography>
+                    <Stack  direction={'row'} justifyContent="space-between" flex >
+                      <TextField
+                        id='distanceFrom'
+                        label='From'
+                        name='distanceFrom'
+                        value={inputs.distanceFrom}
+                        sx={{
+                          minWidth: '75px',
+                          maxWidth:'200px' }}
+                        onChange={event => handleChange(event)}
+                        InputProps={{
+                          startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
+                        }}
+                      />
+                      <InputLabel sx={{ width: '80px', marginTop:2, marginRight: 1, marginLeft: 1 }} >and</InputLabel>
+                      <TextField
+                        id='distanceTo'
+                        label='To'
+                        name='distanceTo'
+                        value={inputs.distanceTo}
+                        sx={{
+                          minWidth: '80px',
+                          maxWidth:'200px' }}
+                        onChange={event => handleChange(event)}
+                        InputProps={{
+                          startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,
+                        }}
+                      />
+                    </Stack>
+                  </Box>
+                </Stack>
+              </Grid>
             </Stack>
-            <Stack flex direction={'row'} justifyContent="space-between" >
-              <InputLabel sx={{ marginTop: 3 }}>Duration between</InputLabel>
-              <TextField
-                id='durationFrom'
-                label='Duration >='
-                name='durationFrom'
-                value={inputs.durationFrom}
-                sx={{ maxWidth: 90 }}
-                onChange={(event) => handleChange(event)}
-                InputProps={{
-                  startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
-                }}
-              />
-              <InputLabel sx={{ marginTop: 3 }}>and</InputLabel>
-              <TextField
-                id='durationTo'
-                label='Duration <='
-                name='durationTo'
-                value={inputs.durationTo}
-                sx={{ maxWidth: 90 }}
-                onChange={event => handleChange(event)}
-                InputProps={{
-                  startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,
-                }}
-              />
-              <InputLabel sx={{ marginTop: 3 }}>distance between</InputLabel>
-              <TextField
-                id='distanceFrom'
-                label='Distance >='
-                name='distanceFrom'
-                value={inputs.distanceFrom}
-                sx={{ maxWidth: 90 }}
-                onChange={event => handleChange(event)}
-                InputProps={{
-                  startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
-                }}
-              />
-              <InputLabel sx={{ marginTop: 3 }}>and</InputLabel>
-              <TextField
-                id='distanceTo'
-                label='Distance <='
-                name='distanceTo'
-                value={inputs.distanceTo}
-                sx={{ maxWidth: 90 }}
-                onChange={event => handleChange(event)}
-                InputProps={{
-                  startAdornment: <InputAdornment position='start'>&#60;=</InputAdornment>,
-                }}
-              />
-            </Stack>
-          </Grid>
-          <Grid>
-            <Stack spacing={3} flex direction={isNarroww ? 'row' : 'column'} marginTop={2} marginBottom={1} >
-              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit}>Filter</Button>
-              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset}>Reset</Button>
-            </Stack>
+            <Box marginTop={1} marginBottom={1} >
+              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit} sx={{ height: '50px' }} >Filter</Button>
+              <span style={{ marginLeft: '16px' }} />
+              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset} >Reset</Button>
+            </Box>
           </Grid>
         </Grid>
       </Box>

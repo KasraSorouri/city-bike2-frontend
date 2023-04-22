@@ -118,11 +118,6 @@ export const BriefStatistic = ({ stationsData }) => {
         <Table size='small' >
           <TableHead>
             <TableRow>
-              <TableCell align='center' colSpan={2} variant="head" >
-                <h3>{stationsData.Stations[0].stationName} station</h3>
-              </TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell align='left'  variant="head" >
                 Station capacity
               </TableCell>

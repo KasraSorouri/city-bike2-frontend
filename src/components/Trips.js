@@ -8,7 +8,9 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  Box
+  Box,
+  useMediaQuery,
+  Container,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import TablePaginationActions from '../utils/tablePaginationActions'
@@ -22,10 +24,10 @@ const Trips = (props) => {
   const orderBy = pageParameter.sort.sortItem
 
   const columnHeader = [
-    { id: 'departureStationName', lable: 'Departure Station', minWidth: 50  },
+    { id: 'departureStationName', lable: 'Departure Station' },
     { id: 'departure', lable: 'Departure Time' },
-    { id: 'returnStationName', lable: 'Return Station', minWidth: 50 },
-    { id: 'return', lable: 'Return Time' },
+    { id: 'returnStationName', lable: 'Destination Station' },
+    { id: 'return', lable: 'Destination Time' },
     { id: 'duration', lable: 'Duration (min)' },
     { id: 'distance', lable: 'Distance (Km)' }
   ]
@@ -38,13 +40,14 @@ const Trips = (props) => {
     }
 
     return (
-      <TableHead>
-        <TableRow>
+      <TableHead >
+        <TableRow >
           {columnHeader.map((column) => (
             <TableCell
               key={column.id}
               align='center'
               style={{ minWidth: column.minWidth }}
+              sx={{ backgroundColor: '#1976d2', color: 'white' }}
               sortDirection={orderBy === column.id ? order : false }
             >
               <TableSortLabel
@@ -79,12 +82,16 @@ const Trips = (props) => {
     )
   }
 
+  // Display improvment
+  const isNarrow = useMediaQuery('(max-width:1024px)')
+
   return(
-    <div>
+    <Container>
       <h2>Trips information</h2>
       <Paper>
-        <TableContainer sx={{ maxHeight: 600 }}>
-          <Table stickyHeader aria-label='sticky table'>
+        <TableContainer
+          sx={{ maxHeight: 600 }}>
+          <Table stickyHeader aria-label='sticky table' >
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -98,15 +105,15 @@ const Trips = (props) => {
                       {trip.departureStationName}
                     </TableCell>
                     <TableCell align='center' >
-                      {dateFormat(trip.departure,'dd.mm.yyyy  HH:MM')}
+                      {isNarrow ? dateFormat(trip.departure,'dd.mm.yyyy') : dateFormat(trip.departure,'dd.mm.yyyy  HH:MM')}
                     </TableCell>
                     <TableCell align='left' >
                       {trip.returnStationName}
                     </TableCell>
-                    <TableCell align='center' >
-                      {dateFormat(trip.return,'dd.mm.yyyy  HH:MM')}
+                    <TableCell align='center'  >
+                      {isNarrow ? dateFormat(trip.departure,'dd.mm.yyyy') : dateFormat(trip.departure,'dd.mm.yyyy  HH:MM')}
                     </TableCell>
-                    <TableCell align='center' >
+                    <TableCell align='center'>
                       {trip.duration.toFixed(0)}
                     </TableCell>
                     <TableCell align='center' >
@@ -130,7 +137,7 @@ const Trips = (props) => {
           ActionsComponent={TablePaginationActions}
         />
       </Paper>
-    </div>
+    </Container>
   )
 }
 

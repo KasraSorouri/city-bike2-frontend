@@ -70,7 +70,6 @@ const AboutApp = () => {
         © 2023 casra
         </Typography>
       </footer>
-
     </Box>
   )
 }

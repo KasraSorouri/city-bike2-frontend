@@ -1,89 +1,110 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import fileService from '../services/fileService'
+import Notification from '../utils/Notification'
 import {
   Button,
   Typography,
-  //ToggleButton,
-  //ToggleButtonGroup,
-  //Stack,
-  Box
+  Box,
 }from '@mui/material'
 
 
 const UploadFiles = () => {
   const [file, setFile] = useState(null)
-  //const [result, setResult] = useState(null)
-  //const [fileSelect, setFileSelect] = useState('trips')
-  //const [duplicationCheck, setDuplicationCheck] = useState('true')
-  const inputRef = useRef(null)
+  const [result, setResult] = useState(null)
 
   const fileChangeHandler = (event) => {
     setFile(event.target.files)
-    //setResult(null)
   }
 
   const fileUploadHandler = async() => {
     const response = await fileService.uploadFile(file[0])
-    inputRef.current.value = null
+    console.log('response ->', response.status)
     if (response) {
+      setResult(response.status)
       setFile(null)
-      //setResult(response)
     }
   }
+  console.log('result ->', result)
 
   const UploadFile = () => {
     return(
       <div>
         <Box marginTop={5}>
-          <Typography variant="h4" gutterBottom marginTop={3}>
-            Here you can Upload the data CSV file for Trips and Station.
-          </Typography>
-          <Typography variant="h5" gutterBottom marginTop={3}>
+          <Typography variant="h6" gutterBottom marginTop={3}>
+            Here you can Upload the CSV file that includes Trips and Stations data.          </Typography>
+          <Typography variant="h5" gutterBottom marginTop={1}>
             Upload trips file
           </Typography>
           <Typography variant="body1" gutterBottom align='justify'>
             For the trips, the first row should contain this information.
-            <Box sx={{
-              border: '2px  solid  black',
-              backgroundColor: 'lightgray',
-              marginTop: 3,
-              marginBottom: 1
-            }} >
-              <i>Departure, Return, Departure station id, Departure station name, Return station id, Return station name, Covered distance (m), Duration (sec.)</i>
-            </Box>
-            * Except for the stations&apos; names, if other information is missed, that row is considered invalid.
-            <Typography variant="h6" gutterBottom marginTop={3}>
-              Upload Stations file
+          </Typography>
+          <Box sx={{
+            border: '2px  solid  black',
+            backgroundColor: 'lightgray',
+            width: 'fit-content',
+            marginInline: 2,
+            display: 'flex',
+            marginTop: 1,
+            marginBottom: 1
+          }}>
+            <Typography variant="body1" gutterBottom margin={1} sx={{ fontStyle: 'italic' }}>
+              Departure, Return, Departure station id, Departure station name, Return station id, Return station name, Covered distance (m), Duration (sec.)
             </Typography>
-            <p>  For the stations, the first row should contain this information.</p>
-            <Box sx={{
-              border: '2px  solid  black',
-              backgroundColor: 'lightgray',
-              marginTop: 3,
-              marginBottom: 1
-            }} >
-              <i>ID, Name, Adress, Kaupunki, Operaattor, Kapasiteet , x, y</i>
-            </Box>
-            * If stations&apos; ID, Name, and Adress is missed, that row is considered invalid.
+          </Box>
+          <Typography variant="body1" gutterBottom align='justify' sx={{ marginInline: 2, display: 'flex' }} >
+            * Except for the stations&apos; names, if other information is missed, that row is considered invalid.
+          </Typography>
+          <Typography variant="h5" gutterBottom marginTop={3}>
+            Upload Stations file
+          </Typography>
+          <Typography variant="body1" gutterBottom align='justify'>
+            For the stations, the first row should contain this information.
+          </Typography>
+          <Box sx={{
+            border: '2px  solid  black',
+            backgroundColor: 'lightgray',
+            width: 'fit-content',
+            marginInline: 2,
+            display: 'flex',
+            marginTop: 1,
+            marginBottom: 1
+          }}>
+            <Typography variant="body1" gutterBottom margin={1} sx={{ fontStyle: 'italic' }}>
+              ID, Name, Adress, Kaupunki, Operaattor, Kapasiteet , x, y
+            </Typography>
+          </Box>
+          <Typography variant="body1" gutterBottom align='justify' sx={{ marginInline: 2, display: 'flex' }} >
+          * If stations&apos; ID, Name, and Adress is missed, that row is considered invalid.
           </Typography>
         </Box>
-        <input
-          id='tripFile'
-          type='file'
-          ref={inputRef}
-          accept=".csv"
-          onChange={fileChangeHandler}
-          style={{ display: 'none' }}
-        />
-        <label htmlFor='tripFile' style={{ borderStyle:'solid',
-          borderRadius:5,
-          padding: 6,
-          paddingRight:80
-        }}>{ file ? file[0].name : 'Click to Upload csv file' }</label>
-        <Button onClick={fileUploadHandler} variant="contained" >
-          Upload
-        </Button>
-        <br/>
+        <Box sx={{ padding: 2 }}>
+          <Typography variant="h6" gutterBottom>
+        Upload a File
+          </Typography>
+          <label htmlFor="file-upload-input">
+            <Button variant="outlined" component="span" fullWidth sx={{ marginBottom: 2 }} >
+              {file ? <Typography>file:  {file[0].name} </Typography> : 'Please choose a CSV file' }
+            </Button>
+            <input
+              id="file-upload-input"
+              type="file"
+              accept=".csv"
+              onChange={fileChangeHandler}
+              style={{ display: 'none' }}
+            />
+          </label>
+          {file && (
+            <Button variant="contained" onClick={fileUploadHandler} mt={2} fullWidth >
+              Upload
+            </Button>
+          )}
+          {file && (
+            <Button variant="contained" onClick={() => setFile(null) } mt={2} fullWidth sx={{ marginTop: 2 }}>
+              Cancel
+            </Button>
+          )}
+        </Box>
+        <Notification text={result} time={5} />
       </div>
     )
   }

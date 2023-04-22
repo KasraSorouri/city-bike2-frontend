@@ -16,6 +16,7 @@ import {
   Box,
   Stack,
   useMediaQuery,
+  Typography,
 } from '@mui/material'
 
 const StationInfo = () => {
@@ -23,7 +24,7 @@ const StationInfo = () => {
   const { sid } = location.state ? location.state : {}
 
   // Display improvment
-  const isNarroww = useMediaQuery('(max-width:1040px)')
+  const isNarrow = useMediaQuery('(max-width:1040px)')
 
   const [inputs, setInputs] = useState({})
 
@@ -93,11 +94,14 @@ const StationInfo = () => {
 
   const SearchStation = () => {
     return(
-      <Stack direction={'row'} spacing={1}>
+      <Stack direction={ isNarrow? 'column' : 'row'} spacing={1}>
         <Autocomplete
           id='station'
           name='station'
-          sx={{ width: '30ch' }}
+          sx={{
+            flex: 1,
+            minWidth: '300px',
+            maxWidth:'600px' }}
           options={stationListParam}
           getOptionLabel={(option) => option.stationName || ''}
           value={inputs.station}
@@ -106,33 +110,35 @@ const StationInfo = () => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label='Origin Station'
+              label='Station'
               onChange={handleStationListFilter}
             />
           )}
           isOptionEqualToValue={(option, value) => option.stationId === value.stationId}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fi}>
-          <DatePicker
-            label='Time from'
-            name='timeFrom'
-            minDate={new Date(timeRanges.earliest)}
-            maxDate={new Date(timeRanges.latest)}
-            value={inputs.timeFrom}
-            onChange={handleStartDate}
-            TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} />}
-          />
-          <DatePicker
-            label='Time to'
-            name='timeTo'
-            minDate={new Date(timeRanges.earliest)}
-            maxDate={new Date(timeRanges.latest)}
-            value={inputs.timeTo}
-            onChange={handleEndDate}
-            TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} /> }
-          />
+          <Stack direction={'row'} spacing={2}>
+            <DatePicker
+              label='Time from'
+              name='timeFrom'
+              minDate={new Date(timeRanges.earliest)}
+              maxDate={new Date(timeRanges.latest)}
+              value={inputs.timeFrom}
+              onChange={handleStartDate}
+              TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} />}
+            />
+            <DatePicker
+              label='Time to'
+              name='timeTo'
+              minDate={new Date(timeRanges.earliest)}
+              maxDate={new Date(timeRanges.latest)}
+              value={inputs.timeTo}
+              onChange={handleEndDate}
+              TextFieldComponent={(params) => <TextField {...params} sx={{ maxWidth: 120 }} /> }
+            />
+          </Stack>
           <Divider orientation="vertical" variant='middle' flexItem={false} >
-            or
+            <Typography variant='body1' marginTop={1}>OR</Typography>
           </Divider>
           <DatePicker
             label='Select Month'
@@ -153,30 +159,36 @@ const StationInfo = () => {
 
   return (
     <div>
-      <Box flex={10}>
-        <h1>Station information</h1>
+      <Box flex={12} marginTop={2}>
         <SearchStation  />
-        <Stack flex direction={isNarroww ? 'column' : 'row'} spacing={2} marginTop={3}>
-          <Box>
-            { stationsData.StationStatistics.popularOrigin.length > 0 ?
-              <Origins stationsData={stationsData} stationList={stationList} /> : <p>No trip starts from this station</p>
-            }
-          </Box>
-          <Box>
-            { stationsData.StationStatistics.popularDestination.length > 0 ?
-              <Destinations stationsData={stationsData} stationList={stationList} /> : <p>No trip ends at this station</p>
-            }
-          </Box>
+        <Typography variant='h4' marginTop={2}>Station information</Typography>
+        <Stack flex direction={isNarrow ? 'column' : 'row'}  marginTop={3}>
+          <Typography variant='h6' marginRight={20} marginTop={-1} ><b>Station name:</b> {stationsData.Stations[0].stationName}</Typography>
+          <Stack flex direction='row' spacing={5} justifyContent={'space-between'} >
+            <Typography variant='body1' ><b>Address:</b> {stationsData.Stations[0].address}</Typography>
+            { (stationsData.Stations[0].city.length > 1) ? (<Typography variant='body1' ><b>City:</b> {stationsData.Stations[0].city}</Typography>) : null }
+            { stationsData.Stations[0].operator.length > 1  ? <Typography variant='body1' ><b>Operator:</b>  {stationsData.Stations[0].operator}</Typography> : null }
+          </Stack>
         </Stack>
-        <Stack flex direction={isNarroww ? 'column' : 'row'} spacing={2} marginTop={3}>
+        <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
           {stationsData ? ( <BriefStatistic stationsData={stationsData}/> ) : null }
           <Box flex={10}>
-            <h3>Address: {stationsData.Stations[0].address}</h3>
-            <br />
             <Map height={300} defaultCenter={[60.22,24.82]} defaultZoom={10}>
               <Marker width={30} anchor={[stationsData.Stations[0].gpsPosition.latitude, stationsData.Stations[0].gpsPosition.longtitude]} color='red' value='test'></Marker>
               <ZoomControl />
             </Map>
+          </Box>
+        </Stack>
+        <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
+          <Box flex={6}>
+            { stationsData.StationStatistics.popularOrigin.length > 0 ?
+              <Origins stationsData={stationsData} stationList={stationList} /> : <p>No trip starts from this station</p>
+            }
+          </Box>
+          <Box flex={6}>
+            { stationsData.StationStatistics.popularDestination.length > 0 ?
+              <Destinations stationsData={stationsData} stationList={stationList} /> : <p>No trip ends at this station</p>
+            }
           </Box>
         </Stack>
       </Box>
