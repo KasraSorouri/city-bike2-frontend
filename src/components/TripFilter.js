@@ -24,7 +24,8 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
   const [filteredDestinationStations, setFilteredDestinationStations] = useState([])
 
   // Display improvment
-  const isNarrow = useMediaQuery('(max-width:1440px)')
+  const isNarrow = useMediaQuery('(max-width:1040px)')
+  const isMidSize = useMediaQuery('(max-width:1440px)')
 
   let initialFilterPrameter = {
     originStationId: null,
@@ -55,8 +56,6 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
   }
 
   const [inputs, setInputs] = useState(initialFilterPrameter)
-
-  const maxItemsToShow = 200
 
   let parameters = {}
   parameters = useQuery(TRIPS_PARAMETERS)
@@ -108,9 +107,9 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())
     )
-    setFilteredOriginStations(filteredStations.slice(0, maxItemsToShow))
+    setFilteredOriginStations(filteredStations)
   }
-  const originStationListParam = filteredOriginStations.length > 0 ? filteredOriginStations : stationList.slice(0, maxItemsToShow)
+  const originStationListParam = filteredOriginStations.length > 0 ? filteredOriginStations : stationList
 
   // Filter the Destination station List based on input value
   const handleDestinationStationListFilter = (event) => {
@@ -118,9 +117,9 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())
     )
-    setFilteredDestinationStations(filteredStations.slice(0, maxItemsToShow))
+    setFilteredDestinationStations(filteredStations)
   }
-  const DestinationStationListParam = filteredDestinationStations.length > 0 ? filteredDestinationStations : stationList.slice(0, maxItemsToShow)
+  const DestinationStationListParam = filteredDestinationStations.length > 0 ? filteredDestinationStations : stationList
 
   // Convert filter parameter and send it back
   const handleSubmit = (event) => {
@@ -165,7 +164,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Stack direction={isNarrow ? 'column' : 'row'} justifyContent="space-between" flex>
+            <Stack direction={isMidSize ? 'column' : 'row'} justifyContent="space-between" flex>
               <Box>
                 <Typography>Stations</Typography>
                 <Stack direction={isNarrow ? 'column' : 'row'} justifyContent="space-between" flex>
@@ -177,7 +176,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                       minWidth: '300px',
                       maxWidth:'600px' }}
                     options={originStationListParam}
-                    getOptionLabel={(option) => option.stationName || ''}
+                    getOptionLabel={(option) => `${option.stationName} (${option.stationId})` || ''}
                     value={inputs.originStation || preSetOriginStation }
                     defaultValue={preSetOriginStation}
                     onChange={(event, newValue) => {
@@ -185,7 +184,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label='Origin Station'
+                        label='Origin Station (Station ID)'
                         onChange={handleOriginStationListFilter}
                       />
                     )}
@@ -200,7 +199,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                       minWidth: '300px',
                       maxWidth:'600px' }}
                     options={DestinationStationListParam}
-                    getOptionLabel={(option) => option.stationName || ''}
+                    getOptionLabel={(option) => `${option.stationName} (${option.stationId})` || ''}
                     value={inputs.destinationStation || preSetReturnStation }
                     defaultValue={preSetReturnStation}
                     onChange={(event, newValue) => {
@@ -208,7 +207,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label='Destination Station'
+                        label='Destination Station (Station ID)'
                         onChange={handleDestinationStationListFilter}
                       />
                     )}
@@ -218,7 +217,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
               <span style={{ margin: '8px' }} />
               <Box>
                 <Typography>Time Ranges</Typography>
-                <Stack direction='row' justifyContent="space-between" flex>
+                <Stack direction='row'justifyItems={'baseline'} flex>
                   <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fi}>
                     <DatePicker
                       label='Time from'
@@ -268,14 +267,14 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                         onChange={(event) => handleChange(event)}
                         InputProps={{ startAdornment: <InputAdornment position='start' >&#62;=</InputAdornment> }}
                       />
-                      <InputLabel sx={{ width: '80px', marginTop:2, marginRight: 1, marginLeft: 1 }}> and</InputLabel>
+                      <InputLabel sx={{ minWidth: '30px', marginTop:2, marginRight: 1, marginLeft: 1 }}> and</InputLabel>
                       <TextField
                         id='durationTo'
                         label='To'
                         name='durationTo'
                         value={inputs.durationTo}
                         sx={{
-                          minWidth: '50px',
+                          minWidth: '75px',
                           maxWidth:'200px' }}
                         onChange={event => handleChange(event)}
                         InputProps={{
@@ -301,7 +300,7 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
                           startAdornment: <InputAdornment position='start'>&#62;=</InputAdornment>,
                         }}
                       />
-                      <InputLabel sx={{ width: '80px', marginTop:2, marginRight: 1, marginLeft: 1 }} >and</InputLabel>
+                      <InputLabel sx={{ minWidth: '30px', marginTop:2, marginRight: 1, marginLeft: 1 }} >and</InputLabel>
                       <TextField
                         id='distanceTo'
                         label='To'
@@ -321,9 +320,9 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
               </Grid>
             </Stack>
             <Box marginTop={1} marginBottom={1} >
-              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit} sx={{ height: '50px' }} >Filter</Button>
+              <Button data-testid="filterButton" variant='contained' size='large' onClick={handleSubmit} sx={{ height: '40px' }} >Filter</Button>
               <span style={{ marginLeft: '16px' }} />
-              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset} >Reset</Button>
+              <Button data-testid="resetButton" variant='contained' size='large' onClick={handleReset} sx={{ height: '40px' }} >Reset</Button>
             </Box>
           </Grid>
         </Grid>

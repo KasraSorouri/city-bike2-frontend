@@ -58,6 +58,14 @@ export const TRIPS = gql`
           duration,
           id,
       }
+      TripFilteredCount (departureStation: $departureStation,
+        returnStation: $returnStation, 
+        departureTimeFrom: $departureTimeFrom,
+        returnTimeTo: $returnTimeTo, 
+        distanceFrom: $distanceFrom,
+        distanceTo: $distanceTo,
+        durationFrom: $durationFrom,
+        durationTo: $durationTo)
   }
 `
 
@@ -81,6 +89,7 @@ export const STATIONS = gql`
           operator,
           capacity,
       }
+      StationFilteredCount (stations: $stationId)
   }
 `
 

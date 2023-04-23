@@ -1,3 +1,4 @@
+import Notification from '../utils/Notification'
 import {
   Paper,
   Table,
@@ -8,7 +9,9 @@ import {
   TableSortLabel,
   TablePagination,
   Box,
-  TableRow } from '@mui/material'
+  TableRow,
+  Stack,
+  Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import TablePaginationActions from '../utils/tablePaginationActions'
 
@@ -74,15 +77,21 @@ const Stations = (props) => {
 
   if (!stations){
     return (
-      <div style={{ color:'red' }}>
-        <h2>No station find!</h2>
-      </div>
+      <Notification text={'No station find!!'} type={'error'} time={0} />
     )
   }
 
   return(
     <div>
-      <h2>Station information</h2>
+      <Stack direction={'row'} columnGap={7}>
+        <Typography variant='h3'>Station information</Typography>
+        {stationsData.StationCount !== stationsData.StationFilteredCount ?
+          <Box marginTop={2.5}>
+            <Notification text={`${stationsData.StationFilteredCount} of ${stationsData.StationCount} is filtered.`} time={0} />
+          </Box>
+          : null
+        }
+      </Stack>
       <Paper>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label='sticky table'>

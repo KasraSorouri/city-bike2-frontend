@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { STATION_INFO, TRIPS_PARAMETERS } from '../queries'
 import { Origins, Destinations, BriefStatistic } from './StationInfoItems'
+import Notification from '../utils/Notification'
 
 import { useLocation  } from 'react-router-dom'
 import { Map, Marker, ZoomControl  } from 'pigeon-maps'
@@ -17,7 +18,9 @@ import {
   Stack,
   useMediaQuery,
   Typography,
+  Container,
 } from '@mui/material'
+
 
 const StationInfo = () => {
   const location = useLocation()
@@ -38,16 +41,18 @@ const StationInfo = () => {
   const result = useQuery(STATION_INFO, { variables: { ...filterParameters } })
 
   if (result.loading) {
-    return <p>loading .....</p>
+    return (
+      <Container sx={{ alignContent: 'center' , borderBlockColor:'red' , border:'slateblue' }}>
+        <Box alignContent={'center'} height={400} margin={10}>
+          <Typography variant='h1' alignSelf={'center'} margin={30}>Loading ...</Typography>
+        </Box>
+      </Container>
+    )
   }
   if (result.error) {
     return (
-      <div>
-        <h2>Error !</h2>
-        <p>
-          {result.error.message}
-        </p>
-      </div>
+      <Notification text={result.error.message} type={'error'} time={0} />
+
     )
   }
 

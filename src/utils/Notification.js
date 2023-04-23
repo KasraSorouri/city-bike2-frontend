@@ -8,9 +8,10 @@ const Notification = ({ text, type, time }) => {
   } else if (time > 0) {
     setTimeout(() => setMessage(null), time *1000 )
   }
+  console.log(' notification message ->', message)
   return (
     <Box>
-      <Typography variant='body1' color={type === 'error' ? 'red' : 'black' }>
+      <Typography variant='body1' color={type === 'error' ? 'red' : 'darkblue' }>
         {message}
       </Typography>
     </Box>

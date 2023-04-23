@@ -5,6 +5,7 @@ import { STATIONS, STATION_LIST } from '../queries'
 import Togglable from './Togglable'
 import Stations from './Stations'
 import StationFilter from './StationFilter'
+import Notification from '../utils/Notification'
 
 const StationsPage = () => {
   const [ page, setPage ] = useState(0)
@@ -24,12 +25,7 @@ const StationsPage = () => {
   }
   if (result.error) {
     return (
-      <div>
-        <h2>Error !</h2>
-        <p>
-          {result.error.message}
-        </p>
-      </div>
+      <Notification text={result.error.message} type={'error'} time={0} />
     )
   }
 
@@ -41,6 +37,7 @@ const StationsPage = () => {
 
   const handelFilter = async(filterData) => {
     setFilterParameters(filterData)
+    setPage(0)
   }
 
   const handleChangePage = (page) => {

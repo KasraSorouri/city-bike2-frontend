@@ -1,3 +1,4 @@
+import Notification from '../utils/Notification'
 import {
   Paper,
   Table,
@@ -11,6 +12,8 @@ import {
   Box,
   useMediaQuery,
   Container,
+  Stack,
+  Typography,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import TablePaginationActions from '../utils/tablePaginationActions'
@@ -18,8 +21,9 @@ import dateFormat from 'dateformat'
 
 const Trips = (props) => {
   const { tripsData, pageParameter, changePage, changeRows, changeSort } = props
+
   const trips = tripsData.Trips
-  const totalTrips = tripsData.TripCount
+  const totalTrips = tripsData.TripFilteredCount
   const order = pageParameter.sort.sortOrder === 1 ? 'asc' : 'desc'
   const orderBy = pageParameter.sort.sortItem
 
@@ -76,9 +80,7 @@ const Trips = (props) => {
 
   if (!trips){
     return (
-      <div style={{ color:'red' }}>
-        <h2>No trip find!</h2>
-      </div>
+      <Notification text={'No trip find!'} type={'error'} time={0} />
     )
   }
 
@@ -87,7 +89,15 @@ const Trips = (props) => {
 
   return(
     <Container>
-      <h2>Trips information</h2>
+      <Stack direction={'row'} columnGap={7}>
+        <Typography variant='h3'>Trips information</Typography>
+        {tripsData.TripCount !== tripsData.TripFilteredCount ?
+          <Box marginTop={2.5}>
+            <Notification text={`${tripsData.TripFilteredCount} of ${tripsData.TripCount} is filtered.`} time={0} />
+          </Box>
+          : null
+        }
+      </Stack>
       <Paper>
         <TableContainer
           sx={{ maxHeight: 600 }}>

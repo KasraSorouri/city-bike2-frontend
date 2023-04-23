@@ -24,8 +24,6 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
 
   const [inputs, setInputs] = useState(initialFilterPrameter)
 
-  const maxItemsToShow = 200
-
   // Handle fields update
   const handleChange = (event) => {
     const name = event.target.name
@@ -39,9 +37,9 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
       (station) =>
         station.stationName.toLowerCase().includes(event.target.value.toLowerCase())
     )
-    setFilteredStations(filteredStations.slice(0, maxItemsToShow))
+    setFilteredStations(filteredStations)
   }
-  const stationListParam = filteredStations.length > 0 ? filteredStations : stationList.slice(0, maxItemsToShow)
+  const stationListParam = filteredStations.length > 0 ? filteredStations : stationList
 
   // Convert filter parameter and send it back
   const handleSubmit = (event) => {
@@ -66,30 +64,30 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
     <div>
       <Box
         component='form'
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
         noValidate
         autoComplete='off'
-        flex={6}
+        flex={8}
       >
         <Grid container>
-          <Grid>
-            <Stack direction={'row'} flex justifyContent="space-between" >
+          <Grid item >
+            <Stack direction={'row'}  >
               <Autocomplete
                 multiple
                 id='station'
                 name='station'
-                sx={{ width: '30ch' }}
+                sx={{
+                  margin:1,
+                  minWidth:'220px',
+                  maxWidth:'600px' }}
                 options={stationListParam}
-                getOptionLabel={(option) => option.stationName || ''}
+                getOptionLabel={(option) => `${option.stationName} (${option.stationId})` || ''}
                 value={inputs.station}
                 onChange={(event, newValue) => {
                   handleChange({ target: { name: 'station', value: newValue } })}}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label='Station'
+                    label='Station (Station ID)'
                     onChange={handleStationListFilter}
                   />
                 )}

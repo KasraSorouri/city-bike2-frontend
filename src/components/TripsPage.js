@@ -5,6 +5,7 @@ import { TRIPS } from '../queries'
 import Togglable from './Togglable'
 import Trips from './Trips'
 import TripFilter from './TripFilter'
+import Notification from '../utils/Notification'
 
 const TripsPage = () => {
   const [ page, setPage ] = useState(0)
@@ -22,12 +23,7 @@ const TripsPage = () => {
 
   if (result.error) {
     return (
-      <div>
-        <h2>Error !</h2>
-        <p>
-          {result.error.message}
-        </p>
-      </div>
+      <Notification text={result.error.message} type={'error'} time={0} />
     )
   }
 
@@ -35,6 +31,7 @@ const TripsPage = () => {
 
   const handelFilter = async(filterData) => {
     setFilterParameters(filterData)
+    setPage(0)
   }
 
   const handleChangePage = (page) => {
