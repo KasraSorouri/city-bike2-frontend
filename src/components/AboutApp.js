@@ -21,14 +21,14 @@ const AboutApp = () => {
       </Typography>
       <Typography variant="body1" gutterBottom align='left'>
         You can download the backend and find more information at:
-        <a href='https://github.com/KasraSorouri/city-bike2-backend' > https://github.com/KasraSorouri/city-bike2-backend </a>
+        <a href='https://github.com/KasraSorouri/city-bike2-backend' data-testid='link-backend' > https://github.com/KasraSorouri/city-bike2-backend </a>
       </Typography>
       <Typography variant="h4" gutterBottom marginTop={2}>
         Frontend
       </Typography>
       <Typography variant="body1" gutterBottom align='left'>
          If you are only interested in the frontend, it is available at:
-        <a href='https://github.com/KasraSorouri/city-bike2-frontend' > https://github.com/KasraSorouri/city-bike2-frontend </a>
+        <a href='https://github.com/KasraSorouri/city-bike2-frontend' data-testid='link-frontend'> https://github.com/KasraSorouri/city-bike2-frontend </a>
       </Typography>
       <Typography variant="h4" gutterBottom marginTop={2}>
         How it works

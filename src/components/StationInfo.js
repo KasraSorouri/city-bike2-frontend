@@ -52,18 +52,28 @@ const StationInfo = () => {
   if (result.error) {
     return (
       <Notification text={result.error.message} type={'error'} time={0} />
+    )
 
+  } if (stationParameter.error) {
+    return (
+      <Notification text={stationParameter.error.message} type={'error'} time={0} />
+    )
+  }
+
+  if (!stationParameter.data) {
+    return (
+      <Notification text={'No Data - please check the database!'} type={'error'} time={0} />
     )
   }
 
   const stationsData = result.data
+
 
   let timeRanges
   let stationList = []
   if (stationParameter.data) {
     stationList = stationParameter.data.StationList
     timeRanges = stationParameter.data.TimeRanges
-
   }
 
   // Filter the stations List based on input value
@@ -159,6 +169,15 @@ const StationInfo = () => {
           />
         </LocalizationProvider>
       </Stack>
+    )
+  }
+
+  if (!stationsData.Stations){
+    return (
+      <div>
+        <SearchStation  />
+        <Notification text={'No Data - please change filter patameters or check the databses!'} type={'error'} time={0} />
+      </div>
     )
   }
 

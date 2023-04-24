@@ -77,14 +77,14 @@ const Stations = (props) => {
 
   if (!stations){
     return (
-      <Notification text={'No station find!!'} type={'error'} time={0} />
+      <Notification text={'No station find!'} type={'error'} time={0} />
     )
   }
 
   return(
     <div>
       <Stack direction={'row'} columnGap={7}>
-        <Typography variant='h3'>Station information</Typography>
+        <Typography variant='h3'>Stations information</Typography>
         {stationsData.StationCount !== stationsData.StationFilteredCount ?
           <Box marginTop={2.5}>
             <Notification text={`${stationsData.StationFilteredCount} of ${stationsData.StationCount} is filtered.`} time={0} />

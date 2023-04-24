@@ -67,6 +67,7 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
         noValidate
         autoComplete='off'
         flex={8}
+        data-testid="StationFilter"
       >
         <Grid container>
           <Grid item >
@@ -75,6 +76,7 @@ const StationFilter = ({ changeFilter, filterParameters, stationList }) => {
                 multiple
                 id='station'
                 name='station'
+                data-testid="filterInputs"
                 sx={{
                   margin:1,
                   minWidth:'220px',

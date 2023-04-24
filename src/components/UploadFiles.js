@@ -5,7 +5,7 @@ import {
   Button,
   Typography,
   Box,
-}from '@mui/material'
+} from '@mui/material'
 
 
 const UploadFiles = () => {
@@ -16,7 +16,7 @@ const UploadFiles = () => {
     setFile(event.target.files)
   }
 
-  const fileUploadHandler = async() => {
+  const fileUploadHandler = async () => {
     const response = await fileService.uploadFile(file[0])
     console.log('response ->', response.status)
     if (response) {
@@ -27,7 +27,7 @@ const UploadFiles = () => {
   console.log('result ->', result)
 
   const UploadFile = () => {
-    return(
+    return (
       <div>
         <Box marginTop={5}>
           <Typography variant="h6" gutterBottom marginTop={3}>
@@ -74,19 +74,20 @@ const UploadFiles = () => {
             </Typography>
           </Box>
           <Typography variant="body1" gutterBottom align='justify' sx={{ marginInline: 2, display: 'flex' }} >
-          * If stations&apos; ID, Name, and Adress is missed, that row is considered invalid.
+            * If stations&apos; ID, Name, and Adress is missed, that row is considered invalid.
           </Typography>
         </Box>
         <Box sx={{ padding: 2 }}>
           <Typography variant="h6" gutterBottom>
-        Upload a File
+            Upload a File
           </Typography>
-          <label htmlFor="file-upload-input">
-            <Button variant="outlined" component="span" fullWidth sx={{ marginBottom: 2 }} >
-              {file ? <Typography>file:  {file[0].name} </Typography> : 'Please choose a CSV file' }
+          <label>
+            <Button variant="outlined" component="span" fullWidth sx={{ marginBottom: 2 }} data-testid="file-upload">
+              {file ? <Typography>file:  {file[0].name} </Typography> : 'Please choose a CSV file'}
             </Button>
             <input
               id="file-upload-input"
+              data-testid="file-upload-input"
               type="file"
               accept=".csv"
               onChange={fileChangeHandler}
@@ -99,7 +100,7 @@ const UploadFiles = () => {
             </Button>
           )}
           {file && (
-            <Button variant="contained" onClick={() => setFile(null) } mt={2} fullWidth sx={{ marginTop: 2 }}>
+            <Button variant="contained" onClick={() => setFile(null)} mt={2} fullWidth sx={{ marginTop: 2 }}>
               Cancel
             </Button>
           )}

@@ -18,6 +18,8 @@ import {
   Typography
 } from '@mui/material'
 
+import Notification from '../utils/Notification'
+
 const TripFilter = ({ changeFilter, filterParameters }) => {
 
   const [filteredOriginStations, setFilteredOriginStations] = useState([])
@@ -64,12 +66,17 @@ const TripFilter = ({ changeFilter, filterParameters }) => {
     return (<p>Loading .... </p>)
   }
   if (parameters.error) {
-    return <h1>error</h1>
+    return (
+      <Notification text={parameters.error.message} type={'error'} time={0} />
+    )
   }
 
   if (!parameters.data) {
-    return null
+    return (
+      <Notification text={'No Data - please check the database!'} type={'error'} time={0} />
+    )
   }
+
   const timeRanges = parameters.data.TimeRanges
   const stationList = parameters.data.StationList
 
