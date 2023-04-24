@@ -10,7 +10,6 @@ const uploadFile = async(file) => {
     file.name
   )
   const  response = await axios.post(`${baseUri}/upload-csv`, formData)
-  console.log(response.data)
   return response.data
 }
 

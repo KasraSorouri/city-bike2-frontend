@@ -17,14 +17,18 @@ const UploadFiles = () => {
   }
 
   const fileUploadHandler = async () => {
-    const response = await fileService.uploadFile(file[0])
-    console.log('response ->', response.status)
-    if (response) {
-      setResult(response.status)
-      setFile(null)
+    try{
+      const response = await fileService.uploadFile(file[0])
+      if (response) {
+        setResult(response)
+        setFile(null)
+      }
+    } catch (err) {
+      return(
+        <Notification text={err} type={'error'} time={10} />
+      )
     }
   }
-  console.log('result ->', result)
 
   const UploadFile = () => {
     return (
@@ -105,7 +109,20 @@ const UploadFiles = () => {
             </Button>
           )}
         </Box>
-        <Notification text={result} time={5} />
+      </div>
+    )
+  }
+
+  const UploadStatus = () => {
+    return (
+      <div>
+        <Typography variant='body1'>{result.status}</Typography>
+        <Typography variant='body1'>the files contains <b>{result.dataType.dataType}</b> data.</Typography>
+        <Typography variant='body1'>the files contains <b>{result.dataType.fileRows}</b> Rows.</Typography>
+        <Typography variant='body1'> <b>{result.dataType.recordAdded}</b> new data add to the database.</Typography>
+        <Typography variant='body1'> <b>{result.dataType.dataInavlid}</b> data add were invalid.</Typography>
+        <Typography variant='body1'> <b>{result.dataType.duplicateRecord}</b> data add were duplicated.</Typography>
+        <Button variant="contained" onClick={() => setResult(null) } >OK</Button>
       </div>
     )
   }
@@ -113,6 +130,7 @@ const UploadFiles = () => {
   return (
     <div>
       <UploadFile />
+      { result ? <UploadStatus  /> : null }
     </div>
   )
 }
