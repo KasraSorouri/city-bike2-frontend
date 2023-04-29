@@ -12,7 +12,7 @@ https://citybike-v2.onrender.com/api
 ```
 
 # Frontend
- Frontend is based on React.JS and Redux and MaterialUI. According to Mui the supported browsers listed in below table.
+ Frontend is based on React.JS and GraphQL, Apollo/Client, and MaterialUI. According to Mui the supported browsers listed in below table.
  <table>
 <thead>
 <tr>
@@ -63,9 +63,14 @@ This page displays some basic statistics about the trips related with this stati
 The station can be chosen directly on this page as well, by the selecting a station on the top corner input. 
 
 ### Uploading the new file
-In ths page Trips ,and Stations data can be uploaded as a CSV file with a ", " separator. The first row was also ignored by the program and treated as a headline. You should select the type of data you want to update on the upload page. (trips or stations), then select your file and deactivate the duplication check option. By deactivating the duplication check option, data is stored on the database faster, but there is a risk of duplicate data, which reduces the validity of statistical reports.
-* You can upload the new file if you run the backend server locally.  
-  
+On this page Trips, and Stations data can be uploaded as a CSV file that contains data for the Trips or The Stations. The first row determines the data type and will be ignored by the program and treated as a headline. 
+
+# Test
+Unit test can be run by:
+```
+>	npm run test
+```
+
 # E2E Test
 For E2E testing tools, I selected [Cypress](https://www.cypress.io).
 To run the test both frontend and backend should be started.
