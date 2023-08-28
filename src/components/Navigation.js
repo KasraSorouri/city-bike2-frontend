@@ -23,6 +23,9 @@ const Navigation = () => {
             <Button color="inherit" component={Link} to='/uploadFiles'>
               Upload Data
             </Button>
+            <Button color="inherit" component={Link} to='/data-analsys'>
+              Data Analsys
+            </Button>
           </Grid>
         </Grid>
       </Toolbar>
