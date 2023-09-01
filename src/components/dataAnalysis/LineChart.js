@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 
 const LineChart = ({ data, station }) => {
   const margin = { top: 20, right: 200, bottom: 20, left: 20 }
-  const width = 1200 - margin.left - margin.right
+  const width = 1630 - margin.left - margin.right
   const height = 650 - margin.top - margin.bottom
 
   const svgRef = useRef()
