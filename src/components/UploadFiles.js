@@ -6,11 +6,14 @@ import {
   Typography,
   Box,
 } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
+
 
 
 const UploadFiles = () => {
   const [file, setFile] = useState(null)
   const [result, setResult] = useState(null)
+  const [ inProgress, setInProgress ] = useState(false)
 
   const fileChangeHandler = (event) => {
     setFile(event.target.files)
@@ -18,12 +21,23 @@ const UploadFiles = () => {
 
   const fileUploadHandler = async () => {
     try{
+      console.time('fileProcessing')
+      console.log('file processing start!')
+      setInProgress(true)
       const response = await fileService.uploadFile(file[0])
       if (response) {
+        console.timeEnd('fileProcessing')
         setResult(response)
         setFile(null)
+        setInProgress(false)
+        const notificationtext = `the file contains <b>${result.dataType.fileRows}</b> Rows of <b>${result.dataType.dataType}</b> data. /n
+        <b>${result.dataType.recordAdded}</b> new data add to the database.`
+        return(
+          <Notification text={notificationtext} type={'info'} time={30} />
+        )
       }
     } catch (err) {
+      setInProgress(false)
       return(
         <Notification text={err} type={'error'} time={10} />
       )
@@ -99,12 +113,12 @@ const UploadFiles = () => {
             />
           </label>
           {file && (
-            <Button variant="contained" onClick={fileUploadHandler} mt={2} fullWidth >
+            <LoadingButton variant="contained" onClick={fileUploadHandler} mt={2} fullWidth loading={inProgress}>
               Upload
-            </Button>
+            </LoadingButton>
           )}
           {file && (
-            <Button variant="contained" onClick={() => setFile(null)} mt={2} fullWidth sx={{ marginTop: 2 }}>
+            <Button variant="contained" onClick={() => setFile(null)} mt={2} fullWidth sx={{ marginTop: 2 }} disabled={inProgress}>
               Cancel
             </Button>
           )}
@@ -117,11 +131,8 @@ const UploadFiles = () => {
     return (
       <div>
         <Typography variant='body1'>{result.status}</Typography>
-        <Typography variant='body1'>the files contains <b>{result.dataType.dataType}</b> data.</Typography>
-        <Typography variant='body1'>the files contains <b>{result.dataType.fileRows}</b> Rows.</Typography>
+        <Typography variant='body1'>the file contains <b>{result.dataType.fileRows}</b> Rows of <b>{result.dataType.dataType}</b> data.</Typography>
         <Typography variant='body1'> <b>{result.dataType.recordAdded}</b> new data add to the database.</Typography>
-        <Typography variant='body1'> <b>{result.dataType.dataInavlid}</b> data add were invalid.</Typography>
-        <Typography variant='body1'> <b>{result.dataType.duplicateRecord}</b> data add were duplicated.</Typography>
         <Button variant="contained" onClick={() => setResult(null) } >OK</Button>
       </div>
     )
@@ -130,7 +141,7 @@ const UploadFiles = () => {
   return (
     <div>
       <UploadFile />
-      { result ? <UploadStatus  /> : null }
+      { result && !inProgress ? <UploadStatus  /> : null }
     </div>
   )
 }

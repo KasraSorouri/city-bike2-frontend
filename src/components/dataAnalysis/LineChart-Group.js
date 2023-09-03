@@ -155,13 +155,11 @@ const LineChart = ({ data, station }) => {
     })
 
     // Mark specific quantities on the Y-axis
-    let quantitiesToMark =  [0,10]
+    let quantitiesToMark =  [0]
     for ( let i = 10; i <= d3.max(data, d => d.bikeQty) ; i += 10 ) {
       quantitiesToMark.push(i)
-      console.log('** quantitiesToMark->',i)
-
     }
-    console.log('** quantitiesToMark->',quantitiesToMark)
+
     quantitiesToMark.forEach(quantity => {
       svg.append('line')
         .attr('x1', 0)

@@ -21,7 +21,6 @@ import {
   Container,
 } from '@mui/material'
 
-
 const StationInfo = () => {
   const location = useLocation()
   const { sid } = location.state ? location.state : {}
@@ -182,41 +181,39 @@ const StationInfo = () => {
   }
 
   return (
-    <div>
-      <Box flex={12} marginTop={2}>
-        <SearchStation  />
-        <Typography variant='h4' marginTop={2}>Station information</Typography>
-        <Stack flex direction={isNarrow ? 'column' : 'row'}  marginTop={3}>
-          <Typography variant='h6' marginRight={20} marginTop={-1} ><b>Station name:</b> {stationsData.Stations[0].stationName}</Typography>
-          <Stack flex direction='row' spacing={5} justifyContent={'space-between'} >
-            <Typography variant='body1' ><b>Address:</b> {stationsData.Stations[0].address}</Typography>
-            { (stationsData.Stations[0].city.length > 1) ? (<Typography variant='body1' ><b>City:</b> {stationsData.Stations[0].city}</Typography>) : null }
-            { stationsData.Stations[0].operator.length > 1  ? <Typography variant='body1' ><b>Operator:</b>  {stationsData.Stations[0].operator}</Typography> : null }
-          </Stack>
+    <Box flex={12} margin={2}>
+      <SearchStation  />
+      <Typography variant='h4' marginTop={2}>Station information</Typography>
+      <Stack flex direction={isNarrow ? 'column' : 'row'}  marginTop={3}>
+        <Typography variant='h6' marginRight={20} marginTop={-1} ><b>Station name:</b> {stationsData.Stations[0].stationName}</Typography>
+        <Stack flex direction='row' spacing={5} justifyContent={'space-between'} >
+          <Typography variant='body1' ><b>Address:</b> {stationsData.Stations[0].address}</Typography>
+          { (stationsData.Stations[0].city.length > 1) ? (<Typography variant='body1' ><b>City:</b> {stationsData.Stations[0].city}</Typography>) : null }
+          { stationsData.Stations[0].operator.length > 1  ? <Typography variant='body1' ><b>Operator:</b>  {stationsData.Stations[0].operator}</Typography> : null }
         </Stack>
-        <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
-          {stationsData ? ( <BriefStatistic stationsData={stationsData}/> ) : null }
-          <Box flex={10}>
-            <Map height={300} defaultCenter={[60.22,24.82]} defaultZoom={10}>
-              <Marker width={30} anchor={[stationsData.Stations[0].gpsPosition.latitude, stationsData.Stations[0].gpsPosition.longtitude]} color='red' value='test'></Marker>
-              <ZoomControl />
-            </Map>
-          </Box>
-        </Stack>
-        <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
-          <Box flex={6}>
-            { stationsData.StationStatistics.popularOrigin.length > 0 ?
-              <Origins stationsData={stationsData} stationList={stationList} /> : <p>No trip starts from this station</p>
-            }
-          </Box>
-          <Box flex={6}>
-            { stationsData.StationStatistics.popularDestination.length > 0 ?
-              <Destinations stationsData={stationsData} stationList={stationList} /> : <p>No trip ends at this station</p>
-            }
-          </Box>
-        </Stack>
-      </Box>
-    </div>
+      </Stack>
+      <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
+        {stationsData ? ( <BriefStatistic stationsData={stationsData}/> ) : null }
+        <Box flex={10}>
+          <Map height={300} defaultCenter={[60.22,24.82]} defaultZoom={10}>
+            <Marker width={30} anchor={[stationsData.Stations[0].gpsPosition.latitude, stationsData.Stations[0].gpsPosition.longtitude]} color='red' value='test'></Marker>
+            <ZoomControl />
+          </Map>
+        </Box>
+      </Stack>
+      <Stack flex direction={isNarrow ? 'column' : 'row'} spacing={2} marginTop={3}>
+        <Box flex={6}>
+          { stationsData.StationStatistics.popularOrigin.length > 0 ?
+            <Origins stationsData={stationsData} stationList={stationList} /> : <p>No trip starts from this station</p>
+          }
+        </Box>
+        <Box flex={6}>
+          { stationsData.StationStatistics.popularDestination.length > 0 ?
+            <Destinations stationsData={stationsData} stationList={stationList} /> : <p>No trip ends at this station</p>
+          }
+        </Box>
+      </Stack>
+    </Box>
   )
 }
 

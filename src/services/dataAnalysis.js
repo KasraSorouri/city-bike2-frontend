@@ -1,21 +1,27 @@
 import axios from 'axios'
 
-const baseUri = '/api/dataAnalysis/'
+const baseUri = '/api/dataAnalysis'
 
 
-const getData = async () => {
-  const result = await axios.get(`${baseUri}/131`)
+const getData = async (sid) => {
+  const result = await axios.get(`${baseUri}/${sid}`)
   //console.log('** data visualization * service * result -> ', result)
   return result.data
 }
 
-const getDestinationData = async () => {
-  const result = await axios.get(`${baseUri}/131/destination`)
+const getDestinationData = async (sid) => {
+  const result = await axios.get(`${baseUri}/${sid}/destination`)
   //console.log('** data visualization * service * result -> ', result)
+  return result.data
+}
+
+const analyseData = async () => {
+  const result = await axios.post(`${baseUri}/`)
   return result.data
 }
 
 export default {
   getData,
-  getDestinationData
+  getDestinationData,
+  analyseData
 }

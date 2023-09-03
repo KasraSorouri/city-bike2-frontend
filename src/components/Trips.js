@@ -11,7 +11,6 @@ import {
   TableSortLabel,
   Box,
   useMediaQuery,
-  Container,
   Stack,
   Typography,
 } from '@mui/material'
@@ -88,7 +87,7 @@ const Trips = (props) => {
   const isNarrow = useMediaQuery('(max-width:1024px)')
 
   return(
-    <Container>
+    <Box>
       <Stack direction={'row'} columnGap={7}>
         <Typography variant='h3'>Trips information</Typography>
         {tripsData.TripCount !== tripsData.TripFilteredCount ?
@@ -147,7 +146,7 @@ const Trips = (props) => {
           ActionsComponent={TablePaginationActions}
         />
       </Paper>
-    </Container>
+    </Box>
   )
 }
 

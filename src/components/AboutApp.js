@@ -3,8 +3,8 @@ import { Box , Typography } from '@mui/material'
 
 const AboutApp = () => {
   return(
-    <Box>
-      <Typography variant="h4" gutterBottom marginTop={3}>
+    <Box margin={4}>
+      <Typography variant="h4" gutterBottom >
         About this App
       </Typography>
       <Typography variant="body1" gutterBottom align='justify'>

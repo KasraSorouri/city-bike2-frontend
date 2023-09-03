@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 
+import { Box } from '@mui/material'
+
 import { STATIONS, STATION_LIST } from '../queries'
 import Togglable from './Togglable'
 import Stations from './Stations'
@@ -57,12 +59,12 @@ const StationsPage = () => {
   const filterActived = filterParameters ? true : false
 
   return(
-    <div>
+    <Box margin={2}>
       <Togglable buttonLabel='Filter' active={ filterActived }>
         <StationFilter changeFilter={handelFilter} filterParameters={filterParameters} stationList={stationList} />
       </Togglable>
       <Stations stationsData={stationsData} pageParameter={pageParameter} changePage={handleChangePage} changeRows={handleChangeRows} changeSort={handleSort} />
-    </div>
+    </Box>
   )
 }
 

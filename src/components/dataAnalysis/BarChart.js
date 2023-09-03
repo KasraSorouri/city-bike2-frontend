@@ -35,8 +35,8 @@ const BarChart = ({ data }) => {
     for (const day of aggregatedData) {
       analizedData.push({
         day: day[0],
-        departure: day[1].get('departure').length,
-        return: day[1].get('return').length,
+        departure: day[1].get('departure') ? day[1].get('departure').length : 0,
+        return: day[1].get('return') ? day[1].get('return').length : 0,
       })
     }
 
@@ -127,7 +127,10 @@ const BarChart = ({ data }) => {
     })
 
     // Mark specific quantities on the Y-axis
-    const quantitiesToMark = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110,120,130,140,150]
+    let quantitiesToMark =  []
+    for ( let i = 10; i <= d3.max(analizedData, d => d.departure +d .return) ; i += 20 ) {
+      quantitiesToMark.push(i)
+    }
     quantitiesToMark.forEach(quantity => {
       svg.append('line')
         .attr('x1', 0)
@@ -162,7 +165,7 @@ const BarChart = ({ data }) => {
         .range([0, innerHeight2])
 
       const balanceChart = svg.append('g')
-        .attr('transform', `translate(0, ${innerHeight1})`)
+        .attr('transform', `translate(0, ${innerHeight1+30})`)
 
       balanceChart.selectAll('rect')
         .data(balanceData)
@@ -208,7 +211,7 @@ const BarChart = ({ data }) => {
   return (
     <div>
       <Typography>Departure and Return</Typography>
-      <svg ref={svgRef} width='1200' height='500' />
+      <svg ref={svgRef} width='1200' height='650' />
     </div>
   )
 }

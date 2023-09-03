@@ -11,7 +11,7 @@ const Notification = ({ text, type, time }) => {
   console.log(' notification message ->', message)
   return (
     <Box>
-      <Typography variant='body1' color={type === 'error' ? 'red' : 'darkblue' }>
+      <Typography variant='body1' color={type === 'error' ? 'red' : 'lightGreen' }>
         {message}
       </Typography>
     </Box>

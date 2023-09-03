@@ -11,8 +11,14 @@ import {
   Box,
   TableRow,
   Stack,
-  Typography } from '@mui/material'
+  Typography,
+  Button
+} from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
+import NotListedLocationIcon from '@mui/icons-material/NotListedLocation'
+import QueryStatsIcon from '@mui/icons-material/QueryStats'
+
+
 import TablePaginationActions from '../utils/tablePaginationActions'
 
 import { useNavigate } from 'react-router-dom'
@@ -103,8 +109,14 @@ const Stations = (props) => {
             <TableBody>
               { stations.map((station) => {
                 return(
-                  <TableRow hover role='checkbox' tabIndex={-1} key={station.id} onClick={() => navigate('/stationInfo',{ state : { sid : station.stationId } }) } >
-                    <TableCell align='center' >
+                  <TableRow hover role='checkbox' tabIndex={-1} key={station.id}  >
+                    <TableCell align='left' >
+                      <Button onClick={() => navigate('/stationInfo',{ state : { sid : station.stationId } }) }>
+                        <NotListedLocationIcon />
+                      </Button>
+                      <Button onClick={() => navigate('/data-analysis',{ state : { sid : station.stationId } }) }>
+                        <QueryStatsIcon />
+                      </Button>
                       {station.stationId}
                     </TableCell>
                     <TableCell align='left' >
