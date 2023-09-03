@@ -5,9 +5,9 @@ import { Typography } from '@mui/material'
 
 import dataAnalysisService from '../../services/dataAnalysis'
 
-const ChordChart = (sid) => {
+const ChordChart = ({ sid }) => {
   const [data, setData] = useState([])
-
+  console.log('chord * sid',sid)
   // Get Data
   useEffect(() => {
     const getData = async () => {

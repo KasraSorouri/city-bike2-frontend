@@ -8,8 +8,8 @@ import { Box, Typography } from '@mui/material'
 
 const DataAnalysis = () => {
   const location = useLocation()
-  const { sid } = location.state ? location.state : '001'
-  console.log('data analysis * sid ->', sid)
+  const { sid } = location.state ? location.state : { sid: '001' }
+
   const [data, setData] = useState([])
   const [station, setStation ] = useState ({})
   //console.log(data, station)
@@ -27,7 +27,7 @@ const DataAnalysis = () => {
       <Typography variant='h4'>Analysis of the station <b>{station.stationName}</b> with id:{station.stationId} </Typography>
       { data.length > 1 && <BarChart data={data} station={station} /> }
       { data.length > 1 && <LineChart data={data} station={station} /> }
-      <ChordChart />
+      <ChordChart sid={ sid } />
     </Box>
   )
 }
